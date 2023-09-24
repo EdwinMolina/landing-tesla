@@ -1,0 +1,108 @@
+---
+import Logo from '../components/Logo.astro';
+---
+
+<header id="landing-header" class="py-6 px-10 flex items-center fixed top-0 w-full justify-between z-40 text-white">
+    <div class="flez flex-grow basis-0">
+        <Logo/>
+    </div>
+
+    <nav class="">
+        <ul class="flex text-sm [&>li>a]:transition-colors [&>li>a]:duration-300 [&>li>a]:text-current [&>li>a]:font-medium [&>li>a]:inline-block [&>li>a]:px-4 [&>li>a]:py-2">
+            <li><a href="#">Vehicles</a></li>
+            <li><a href="#">Energy</a></li>
+            <li><a href="#">Charging</a></li>
+            <li><a href="#">Discover</a></li>
+            <li><a href="#">Shop</a></li>
+        </ul>
+    </nav>
+
+    <nav class="flex flex-grow basis-0 justify-end">
+        <ul class="flex [&>li>a]:transition-colors [&>li>a]:duration-300 [&>li>a]:inline-block [&>li>a]:px-2 [&>li>a]:py-2">
+            <li>
+                <a href="#">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M10.125 8.875C10.125 7.83947 10.9645 7 12 7C13.0355 7 13.875 7.83947 13.875 8.875C13.875 9.56245 13.505 10.1635 12.9534 10.4899C12.478 10.7711 12 11.1977 12 11.75V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="12" cy="16" r="1" fill="currentColor"/>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <svg class="w-6 h-6" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                        width="800px" height="800px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                        <path fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" d="M32.001,0.887c17.184,0,31.113,13.929,31.112,31.113
+                            C63.114,49.185,49.184,63.115,32,63.113C14.815,63.114,0.887,49.185,0.888,32.001C0.885,14.816,14.815,0.887,32.001,0.887z"/>
+                        <line fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" x1="32" y1="1" x2="32" y2="63"/>
+                        <line fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" x1="63" y1="32" x2="1" y2="32"/>
+                        <path fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" d="M30,1c0,0-14,11-14,31s14,31,14,31"/>
+                        <path fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" d="M34,1c0,0,14,11,14,31S34,63,34,63"/>
+                        <path fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" d="M8,12c0,0,5,10,24,10s24-10,24-10"/>
+                        <path fill="none" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" d="M8,52c0,0,5-10,24-10s24,10,24,10"/>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="9" r="3" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>	
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="menu-backdrop" class="absolute top-0 left-0 bg-black/5 backdrop-blur-lg rounded translate-x-[var(--left)] translate-y-[var(--top)]
+    w-[var(--width)] h-[var(--height)]  transition-all duration-300 ease-in-out opacity-0 -z-10">
+
+    </div>
+
+</header>
+<script>
+    const listItem = document.querySelectorAll("#landing-header li")
+    const menuBackDrop = document.querySelector("#menu-backdrop") as HTMLElement
+
+    listItem.forEach((item) => {
+        item.addEventListener("mouseenter", ({ target }) => {
+            const {left, top, width, height} = item.getBoundingClientRect()
+            menuBackDrop.style.setProperty("--left", `${left}px`)
+            menuBackDrop.style.setProperty("--top", `${top}px`)
+            menuBackDrop.style.setProperty("--width", `${width}px`)
+            menuBackDrop.style.setProperty("--height", `${height}px`)
+            menuBackDrop.style.opacity = "1"
+            menuBackDrop.style.visibility = "visible"
+        })
+
+        item.addEventListener("mouseleave", () =>{
+            menuBackDrop.style.opacity = "0"
+            menuBackDrop.style.visibility = "hidden"
+        })
+    });
+</script>
+
+
+<script>
+    const $header = document.querySelector("#landing-header") as HTMLElement;
+
+    const observerOptions = {
+        root: null, //viewport por default
+        rootMargin: '0px', // en cuanto se vea el elemento
+        threshold: 0.90 // porcentaje de visibilidad
+    }
+
+    const observer =  new IntersectionObserver( entries =>{
+        entries.forEach(entry =>{
+            const {isIntersecting} = entry
+            if(isIntersecting){
+                const color = entry.target.getAttribute('data-header-color')
+                $header.style.color = color
+            }
+        })
+    }, observerOptions)
+
+    const section = document.querySelectorAll(".landing-section")
+    section.forEach(section => observer.observe(section))
+</script>
